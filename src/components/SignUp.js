@@ -1,73 +1,66 @@
-import React, { useState } from 'react';
-import { auth, createUserWithEmailAndPassword } from '../firebase'; // Correct import
-import { useNavigate, Link } from 'react-router-dom';
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import { useNavigate, Link } from "react-router-dom";
 
-const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+export default function SignUp() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters long.");
+    if (password !== confirmPassword) {
+      alert("Passwords don't match!");
       return;
     }
 
-    setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/tasks');
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      setLoading(false);
+      navigate("/tasks");
+    } catch (err) {
+      alert(err.message);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-teal-400 via-blue-500 to-purple-600">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Sign Up</h2>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen bg-gradient-to-tr from-purple-600 to-blue-500 flex items-center justify-center">
+      <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md space-y-6">
+        <h2 className="text-3xl font-extrabold text-gray-800 text-center">Sign Up</h2>
+        <form onSubmit={handleSignUp} className="space-y-4">
           <input
             type="email"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             placeholder="Email"
-            value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
-            required
           />
           <input
             type="password"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             placeholder="Password"
-            value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
-            required
+          />
+          <input
+            type="password"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Confirm Password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <button
             type="submit"
-            className="w-full bg-teal-600 text-white py-2 rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
-            disabled={loading}
+            className="w-full py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition duration-200"
           >
-            {loading ? 'Signing Up...' : 'Sign Up'}
+            Sign Up
           </button>
         </form>
-
-        <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link to="/signin" className="text-teal-600 hover:text-teal-700">
-              Sign In
-            </Link>
-          </p>
-        </div>
+        <p className="text-center text-sm text-gray-600">
+          Already have an account?{" "}
+          <Link to="/signin" className="text-blue-700 font-medium hover:underline">
+            Sign in
+          </Link>
+        </p>
       </div>
     </div>
   );
-};
-
-export default SignUp;
+}

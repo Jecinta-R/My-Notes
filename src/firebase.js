@@ -1,38 +1,22 @@
-// firebase.js
-import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { getFirestore, collection, query, where, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
+// Import necessary Firebase modules
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
-// Your Firebase config
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyApiHj0yo6gMVtwsTkROx3NEudx2fYwOso',
-  authDomain: 'taskmanager-3072b.firebaseapp.com',
-  projectId: 'taskmanager-3072b',
-  storageBucket: 'taskmanager-3072b.firebasestorage.app',
-  messagingSenderId: '776594679746',
-  appId: '1:776594679746:web:6c9b443ad49faea217d85b',
-  measurementId: 'G-YHPNZL7QMN',
+  apiKey: "AIzaSyCYrDhWHgvYgDmoCgrOKL7xgRVXY3YiWmQ",
+  authDomain: "taskmanager-ad759.firebaseapp.com",
+  projectId: "taskmanager-ad759",
+  storageBucket: "taskmanager-ad759.appspot.com",
+  messagingSenderId: "1019986325201",
+  appId: "1:1019986325201:web:18527961e3438b77b29ff0",
+  measurementId: "G-M4Y30C1FF8"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and Firestore
-const auth = getAuth(app);
-const firestore = getFirestore(app);
-
-// Export the necessary Firebase services
-export {
-  auth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  firestore,
-  collection,
-  query,
-  where,
-  getDocs,
-  addDoc,
-  deleteDoc,
-  doc,
-};
+// Export auth and db for use in the app
+export const auth = getAuth(app);
+export const db = getFirestore(app);
