@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useTheme } from "../utils/ThemeContext";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Moon,
@@ -11,8 +10,31 @@ import {
   Trash2,
 } from "lucide-react";
 
+// Simple theme implementation to avoid dependency on ThemeContext
 const Navbar = () => {
-  const { theme, toggleTheme } = useTheme();
+  // Local theme state to avoid dependency on ThemeContext
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  });
+  
+  const toggleTheme = () => {
+    setTheme(prevTheme => {
+      const newTheme = prevTheme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', newTheme);
+      // Apply theme to document
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add(newTheme);
+      return newTheme;
+    });
+  };
+
+  // Apply theme on initial render
+  useEffect(() => {
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+  }, [theme]);
+
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [userEmail, setUserEmail] = useState("");
@@ -67,7 +89,7 @@ const Navbar = () => {
             title="Trash Bin"
           >
             <Trash2 size={16} className="mr-2" />
-            Trash Bin
+            <span className="hidden sm:inline">Trash Bin</span>
           </Link>
         )}
       </div>
